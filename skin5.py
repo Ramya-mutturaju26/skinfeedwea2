@@ -5,7 +5,6 @@ import requests
 # Weather Function
 # -----------------------------
 def get_weather(city, api_key):
-    # Note: Hardcoded key inside function overrides the one passed from the UI
     api_key = "a5482befe9542069c10e8562404b6027"
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
     try:
@@ -43,38 +42,52 @@ def recommend_product(skin_type, preference, temp, humidity, uv_index=7):
             return "Basic Non-comedogenic Moisturizer 🌿"
 
 # -----------------------------
-# Professional UI Styling
+# Professional Dark Mode UI Styling
 # -----------------------------
-# Using a clean, subtle light-grey/blue gradient common in modern SaaS dashboards
-professional_bg = """
+professional_dark_bg = """
 <style>
+/* Main app container background */
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #f8fafc !important;
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
+/* Sidebar background customization */
 [data-testid="stSidebar"] {
-    background-color: #ffffff !important;
-    border-right: 1px solid #e0e0e0;
+    background-color: #0b0f19 !important;
+    border-right: 1px solid #334155;
 }
+/* Header glassmorphism look */
 [data-testid="stHeader"] {
     background: rgba(0,0,0,0);
 }
-/* Style buttons to look sharper */
+/* Style text elements to be readable on dark background */
+h1, h2, h3, p, span, label {
+    color: #f8fafc !important;
+}
+/* Polishing interactive buttons */
 .stButton>button {
-    background-color: #4A90E2 !important;
-    color: white !important;
+    background-color: #38bdf8 !important; /* Premium Cyan/Blue accent */
+    color: #0f172a !important;
     border-radius: 6px !important;
     border: none !important;
     font-weight: 600;
     transition: all 0.3s ease;
 }
 .stButton>button:hover {
-    background-color: #357ABD !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background-color: #7dd3fc !important;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+/* Clean up input labels styling */
+.stWidgetForm {
+    background-color: rgba(30, 41, 59, 0.7);
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 20px;
 }
 </style>
 """
-st.markdown(professional_bg, unsafe_allow_html=True)
+st.markdown(professional_dark_bg, unsafe_allow_html=True)
 
 # -----------------------------
 # Multi-Page Navigation
@@ -100,9 +113,8 @@ if page == "Home":
 elif page == "Weather & Skincare":
     st.title("🩺 Real-Time Recommendation Engine")
     
-    api_key = "YOUR_API_KEY"  # Replace with your OpenWeather key if changing global execution
+    api_key = "YOUR_API_KEY"
     
-    # Wrap elements in a clean form structure
     with st.form("skincare_form"):
         city = st.text_input("📍 Enter your city:", placeholder="e.g., London, New York")
         skin_type = st.selectbox("Select skin profile:", ["normal", "oily", "dry"])
@@ -118,7 +130,7 @@ elif page == "Weather & Skincare":
             if temp is not None:
                 product = recommend_product(skin_type, preference, temp, humidity)
                 
-                # Metrics layout for professional analytical split
+                # Metrics layout
                 col1, col2 = st.columns(2)
                 with col1:
                     st.metric(label="Temperature", value=f"{temp} °C")
